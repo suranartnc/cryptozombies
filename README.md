@@ -1,1 +1,1 @@
-# cryptozombies
+# CryptoZombies
