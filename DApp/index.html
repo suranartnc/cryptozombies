@@ -12,20 +12,20 @@
     <div id="txStatus"></div>
     <div id="zombies"></div>
     <script>
-        var cryptoZombies
+        var cryptoZombies;
 
         function createRandomZombie(name) {
-
             $("#txStatus").text("Creating new zombie on the blockchain. This may take a while...");
 
-            return cryptoZombies.createRandomZombie.sendTransaction(name, {
-                from: web3.eth.accounts[0]
-            }, function(error, result) {
-                console.log(error, result)
+            return cryptoZombies.createRandomZombie(name, {
+                from: web3.eth.accounts[5],
+                value: 4712388
             })
+                .then(console.log)
+                .catch(console.log);
         }
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
 
             // Initializing
             if (typeof web3 !== 'undefined') {
@@ -37,88 +37,77 @@
 
             var contractABI = [{
                 constant: true,
-                inputs: [
-                    [Object]
-                ],
+                inputs: [[Object]],
                 name: 'zombies',
-                outputs: [
-                    [Object],
-                    [Object],
-                    [Object],
-                    [Object],
-                    [Object],
-                    [Object]
-                ],
+                outputs: [[Object], [Object], [Object], [Object], [Object], [Object]],
                 payable: false,
                 stateMutability: 'view',
                 type: 'function'
-            }, {
+            },
+            {
                 constant: true,
-                inputs: [
-                    [Object]
-                ],
+                inputs: [[Object]],
                 name: 'zombieToOwner',
-                outputs: [
-                    [Object]
-                ],
+                outputs: [[Object]],
                 payable: false,
                 stateMutability: 'view',
                 type: 'function'
-            }, {
+            },
+            {
                 constant: true,
                 inputs: [],
                 name: 'owner',
-                outputs: [
-                    [Object]
-                ],
+                outputs: [[Object]],
                 payable: false,
                 stateMutability: 'view',
                 type: 'function'
-            }, {
+            },
+            {
                 constant: false,
-                inputs: [
-                    [Object]
-                ],
+                inputs: [[Object]],
                 name: 'transferOwnership',
                 outputs: [],
                 payable: false,
                 stateMutability: 'nonpayable',
                 type: 'function'
-            }, {
+            },
+            {
                 anonymous: false,
-                inputs: [
-                    [Object],
-                    [Object],
-                    [Object]
-                ],
+                inputs: [[Object], [Object], [Object]],
                 name: 'NewZombie',
                 type: 'event'
-            }, {
+            },
+            {
                 anonymous: false,
-                inputs: [
-                    [Object],
-                    [Object]
-                ],
+                inputs: [[Object], [Object]],
                 name: 'OwnershipTransferred',
                 type: 'event'
-            }, {
+            },
+            {
                 constant: false,
-                inputs: [
-                    [Object]
-                ],
+                inputs: [[Object]],
                 name: 'createRandomZombie',
                 outputs: [],
                 payable: false,
                 stateMutability: 'nonpayable',
                 type: 'function'
-            }]
+            },
+            {
+                constant: true,
+                inputs: [[Object]],
+                name: 'greet',
+                outputs: [[Object]],
+                payable: false,
+                stateMutability: 'pure',
+                type: 'function'
+            }];
 
-            var contractAddress = "0xe3ac7b82ec0cdd157b1bf6679a24ba6c7d10761a";
+            var contractAddress = "0x10e089291e575329d57e787c7aeef4536b7b0e99";
 
             var cryptoZombiesContract = web3.eth.contract(contractABI);
             cryptoZombies = cryptoZombiesContract.at(contractAddress);
 
-            createRandomZombie('TAE')
+            createRandomZombie('TAE');
         })
     </script>
 </body>

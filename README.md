@@ -16,7 +16,7 @@ truffle init
 ## Run Ganache
 
 ```bash
-ganache-cli -p 7545
+ganache-cli -p 8545
 ```
 
 ## Compile code
