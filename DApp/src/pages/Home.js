@@ -14,15 +14,32 @@ const Container = styled.div`
 class HomePage extends Component {
   state = {
     zombieName: '',
-    zombieId: ''
+    zombieId: '',
+    zombies: []
   }
 
   componentDidMount() {
     this.cryptoZombie = new CryptoZombie()
 
-    this.cryptoZombie.listenToNewZombie(function(data) {
+    setTimeout(async () => {
+      const zombies = await this.cryptoZombie.getZombiesByOwner()
+      const zombieDetails = await Promise.all(
+        zombies.map(
+          async zombieId => await this.cryptoZombie.getZombieDetails(zombieId)
+        )
+      )
+
+      this.setState({
+        zombies: zombieDetails
+      })
+    }, 3000)
+
+    this.cryptoZombie.listenToNewZombie(data => {
       const { name, dna, zombieId } = data
       console.log(`New zombie "${name}" created with DNA "${dna}"`)
+
+      const zombieDetail = this.cryptoZombie.generateZombie(zombieId, name, dna)
+      console.log(zombieDetail)
     })
   }
 
@@ -69,6 +86,12 @@ class HomePage extends Component {
             </label>
             <button onClick={this.onFindZombieOwnerFormSubmit}>Submit</button>
           </form>
+
+          <div>
+            {this.state.zombies.map(function(zombie) {
+              return <p key={zombie.dna}>{zombie.name}</p>
+            })}
+          </div>
         </Container>
       </Layout>
     )

@@ -28,7 +28,7 @@ truffle compile
 ## Deploy code to network created with Ganache
 
 ```bash
-truffle migrate --network development
+truffle migrate --network development --reset
 ```
 
 ## Access console of network (Truffle use Web3 to connect to Ganache)
