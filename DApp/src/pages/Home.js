@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Web3 from 'web3'
 
 import Layout from '@common/components/Layout'
-import ZombieFactoryABI from '../abi/ZombieFactory'
+import CryptoZombie from '../cryptoZombie'
 
 const Container = styled.div`
   display: flex;
@@ -13,60 +12,45 @@ const Container = styled.div`
 `
 
 class HomePage extends Component {
-  account = ''
-  ZombieFactoryContract = null
+  state = {
+    zombieName: ''
+  }
 
   componentDidMount() {
-    window.addEventListener('load', () => {
-      this.ZombieFactoryContract = this.initializeContract().then(() => {
-        this.ZombieFactoryContract.once('NewZombie', function(error, event) {
-          if (error) return
-          console.log('New Zombie Created: ', event.returnValues)
-        })
+    this.cryptoZombie = new CryptoZombie()
 
-        this.createRandomZombie('Tae')
-      })
+    this.cryptoZombie.listenToNewZombie(function(data) {
+      const { name, dna, zombieId } = data
+      console.log(`New zombie "${name}" created with DNA "${dna}"`)
     })
   }
 
-  async initializeContract() {
-    // Ganache WebSocket
-    const web3 = new Web3(
-      new Web3.providers.WebsocketProvider('ws://localhost:7545')
-    )
-
-    // Metamask
-    // const web3 = new Web3(window.web3.currentProvider)
-
-    let accounts = await web3.eth.getAccounts()
-
-    const ZombieFactoryAddress = '0xfd5cb1270ed8173f06b9063206f07f6cf9e46610'
-    const ZombieFactoryContract = new web3.eth.Contract(
-      ZombieFactoryABI,
-      ZombieFactoryAddress
-    )
-
-    this.ZombieFactoryContract = ZombieFactoryContract
-    this.account = accounts[4]
+  onFormSubmit = e => {
+    e.preventDefault()
+    this.cryptoZombie.createRandomZombie(this.state.zombieName)
   }
 
-  async createRandomZombie(name) {
-    return this.ZombieFactoryContract.methods
-      .createRandomZombie(name)
-      .send({
-        from: this.account,
-        gas: '1000000'
-      })
-      .on('receipt', function(receipt) {
-        console.log(receipt)
-      })
-      .on('error', console.error)
+  onNameChanged = e => {
+    this.setState({
+      zombieName: e.target.value
+    })
   }
 
   render() {
     return (
       <Layout>
-        <Container>Homepage</Container>
+        <Container>
+          <form onSubmit={this.onFormSubmit}>
+            <input
+              type="text"
+              value={this.state.zombieName}
+              onChange={this.onNameChanged}
+            />
+            <button onClick={this.onClickCreateZombie}>
+              Create random zombie
+            </button>
+          </form>
+        </Container>
       </Layout>
     )
   }
