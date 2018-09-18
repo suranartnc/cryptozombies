@@ -89,8 +89,8 @@ class HomePage extends Component {
 
           <div>
             {this.state.zombies.map(zombie => {
-              const zombieDetail = this.cryptoZombie.generateZombie(zombie)
-              console.log('zombieDetail', zombieDetail)
+              const generatedZombie = this.cryptoZombie.generateZombie(zombie)
+              console.log('generatedZombie', generatedZombie)
               return <p key={zombie.dna}>{zombie.name}</p>
             })}
           </div>
