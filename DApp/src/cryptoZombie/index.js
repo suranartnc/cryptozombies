@@ -86,7 +86,7 @@ export default class CryptoZombie {
     }
   }
 
-  generateZombie(id, name, dna) {
+  generateZombie({ name, dna }) {
     let dnaStr = String(dna)
     // pad DNA with leading zeroes if it's less than 16 characters
     while (dnaStr.length < 16) dnaStr = '0' + dnaStr

@@ -88,7 +88,9 @@ class HomePage extends Component {
           </form>
 
           <div>
-            {this.state.zombies.map(function(zombie) {
+            {this.state.zombies.map(zombie => {
+              const zombieDetail = this.cryptoZombie.generateZombie(zombie)
+              console.log('zombieDetail', zombieDetail)
               return <p key={zombie.dna}>{zombie.name}</p>
             })}
           </div>
