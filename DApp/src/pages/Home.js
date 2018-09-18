@@ -13,7 +13,8 @@ const Container = styled.div`
 
 class HomePage extends Component {
   state = {
-    zombieName: ''
+    zombieName: '',
+    zombieId: ''
   }
 
   componentDidMount() {
@@ -25,14 +26,19 @@ class HomePage extends Component {
     })
   }
 
-  onFormSubmit = e => {
+  onCreateZombieFormSubmit = e => {
     e.preventDefault()
     this.cryptoZombie.createRandomZombie(this.state.zombieName)
   }
 
-  onNameChanged = e => {
+  onFindZombieOwnerFormSubmit = e => {
+    e.preventDefault()
+    this.cryptoZombie.getOwnerByZombieId(this.state.zombieId)
+  }
+
+  onInputChanged = name => e => {
     this.setState({
-      zombieName: e.target.value
+      [name]: e.target.value
     })
   }
 
@@ -40,15 +46,28 @@ class HomePage extends Component {
     return (
       <Layout>
         <Container>
-          <form onSubmit={this.onFormSubmit}>
-            <input
-              type="text"
-              value={this.state.zombieName}
-              onChange={this.onNameChanged}
-            />
-            <button onClick={this.onClickCreateZombie}>
-              Create random zombie
-            </button>
+          <form onSubmit={this.onCreateZombieFormSubmit}>
+            <label>
+              Zombie name
+              <input
+                type="text"
+                value={this.state.zombieName}
+                onChange={this.onInputChanged('zombieName')}
+              />
+            </label>
+            <button onClick={this.onCreateZombieFormSubmit}>Create</button>
+          </form>
+
+          <form onSubmit={this.onFindZombieOwnerFormSubmit}>
+            <label>
+              Zombie ID
+              <input
+                type="text"
+                value={this.state.zombieId}
+                onChange={this.onInputChanged('zombieId')}
+              />
+            </label>
+            <button onClick={this.onFindZombieOwnerFormSubmit}>Submit</button>
           </form>
         </Container>
       </Layout>

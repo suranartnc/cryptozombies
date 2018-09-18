@@ -26,7 +26,7 @@ export default class CryptoZombie {
 
   async loadUserAddress() {
     const accounts = await this.web3.eth.getAccounts()
-    return accounts[0]
+    return accounts[3]
   }
 
   listenToNewZombie(callback) {
@@ -51,6 +51,19 @@ export default class CryptoZombie {
           from: this.account,
           gas: '1000000'
         })
+      console.log(result)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async getOwnerByZombieId(zombieId) {
+    try {
+      this.log('getOwnerByZombieId', this.account)
+
+      const result = await this.zombieFactory.methods
+        .zombieToOwner(zombieId)
+        .call()
       console.log(result)
     } catch (error) {
       console.error(error)
